@@ -13,6 +13,7 @@ const {
   setDoc,
   serverTimestamp,
 } = require("firebase/firestore");
+const { getRandomWord } = require("./wordLists");
 
 // Firebase configuration
 const firebaseConfig = {
@@ -47,16 +48,8 @@ const generateRandomSecret = (length, mode, language) => {
     }
     return secret;
   } else {
-    // Word mode
-    const enLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const mnLetters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯӨҮ";
-    const alphabet = language === "MN" ? mnLetters : enLetters;
-
-    let secret = "";
-    for (let i = 0; i < length; i++) {
-      secret += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-    }
-    return secret;
+    // Word mode - use real words from word lists
+    return getRandomWord(length, language);
   }
 };
 

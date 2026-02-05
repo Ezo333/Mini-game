@@ -3,6 +3,8 @@
 ## Overview
 Added a complete single-player mode where players can practice against AI and earn coins (less than multiplayer).
 
+**AI uses real words from curated dictionaries** - making the game logical and fun to play!
+
 ## Coin Rewards
 
 ### Multiplayer (1v1)
@@ -104,9 +106,26 @@ New fields added to user documents:
 ✅ Three difficulty levels
 ✅ Performance-based rewards
 ✅ Supports all game modes (number/word, EN/MN)
+✅ **AI uses real dictionary words** (not random letters)
 ✅ Time bonuses and guess bonuses
 ✅ Separate stats tracking
 ✅ AI opponent with random secrets
+
+## Word Generation System
+
+### Solo Mode
+- **AI uses real words** from built-in dictionaries
+- **English:** 300+ common words per length (4-6 letters)
+- **Mongolian:** 200+ Cyrillic words per length (4-6 letters)
+- Examples: APPLE, CHESS, DREAM (EN) or ГАЗАР, БАЯР, ЖАРГАЛ (MN)
+- Makes the game **logical and fair** to play
+
+### Multiplayer
+- **Players enter their own words**
+- More strategic - choose your secret word
+- No dictionary check (any valid alphabet word works)
+
+See `WORD_SYSTEM.md` for complete documentation on word lists.
 
 ## Balance Philosophy
 Solo mode now requires entry fees to:

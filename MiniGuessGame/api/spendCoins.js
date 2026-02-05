@@ -12,6 +12,7 @@ const {
   doc,
   getDoc,
   updateDoc,
+  setDoc,
   serverTimestamp,
 } = require("firebase/firestore");
 
@@ -84,9 +85,44 @@ module.exports = async function handler(req, res) {
     const userDoc = await getDoc(userRef);
 
     if (!userDoc.exists()) {
-      return res.status(404).json({
-        error: "User not found",
-        message: "Please play a game first to create your profile.",
+      // New user - create profile with starting coins
+      const startingCoins = 500;
+
+      if (amount > startingCoins) {
+        return res.status(400).json({
+          error: "Insufficient coins",
+          message: `You need ${amount} coins but only have ${startingCoins}. New players start with ${startingCoins} coins.`,
+          currentCoins: startingCoins,
+          required: amount,
+        });
+      }
+
+      // Create new user profile with coins deducted
+      await setDoc(userRef, {
+        username: username.trim(),
+        elo: 1500,
+        wins: 0,
+        losses: 0,
+        gamesPlayed: 0,
+        coins: startingCoins - amount,
+        totalCoinsEarned: 0,
+        soloGamesPlayed: 0,
+        soloWins: 0,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: `Successfully spent ${amount} coins`,
+        data: {
+          username: username.trim(),
+          previousCoins: startingCoins,
+          spentAmount: amount,
+          newCoins: startingCoins - amount,
+          reason,
+          isNewUser: true,
+        },
       });
     }
 

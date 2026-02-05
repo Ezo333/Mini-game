@@ -16,7 +16,7 @@ import { Colors, Spacing, BorderRadius, FontSizes } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const API_BASE_URL =
-  "https://mini-guess-game-inp9mrf1u-ezo333s-projects.vercel.app/api";
+  "https://mini-guess-game-iqveh3itl-ezo333s-projects.vercel.app/api";
 
 interface GuessEntry {
   guess: string;

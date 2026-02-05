@@ -37,7 +37,7 @@ export default function LobbyScreen() {
   const colors = Colors[(colorScheme ?? "light") as keyof typeof Colors];
 
   const API_BASE_URL =
-    "https://mini-guess-game-inp9mrf1u-ezo333s-projects.vercel.app/api";
+    "https://mini-guess-game-iqveh3itl-ezo333s-projects.vercel.app/api";
 
   React.useEffect(() => {
     fetchUserProfile();
@@ -51,9 +51,34 @@ export default function LobbyScreen() {
       const data = await response.json();
       if (data.success) {
         setUserProfile(data.data);
+      } else {
+        // User not found - show default new user state
+        setUserProfile({
+          username,
+          elo: 1500,
+          wins: 0,
+          losses: 0,
+          gamesPlayed: 0,
+          coins: 500,
+          soloGamesPlayed: 0,
+          soloWins: 0,
+          isNewUser: true,
+        });
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
+      // On error, show default new user state
+      setUserProfile({
+        username,
+        elo: 1500,
+        wins: 0,
+        losses: 0,
+        gamesPlayed: 0,
+        coins: 500,
+        soloGamesPlayed: 0,
+        soloWins: 0,
+        isNewUser: true,
+      });
     }
   };
 
