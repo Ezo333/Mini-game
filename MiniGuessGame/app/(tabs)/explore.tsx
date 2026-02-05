@@ -19,6 +19,9 @@ interface LeaderboardEntry {
   wins: number;
   losses: number;
   gamesPlayed: number;
+  coins: number;
+  soloGamesPlayed?: number;
+  soloWins?: number;
 }
 
 export default function LeaderboardScreen() {
@@ -43,6 +46,7 @@ export default function LeaderboardScreen() {
           wins: 45,
           losses: 12,
           gamesPlayed: 57,
+          coins: 1500,
         },
         {
           id: "2",
@@ -51,6 +55,7 @@ export default function LeaderboardScreen() {
           wins: 38,
           losses: 15,
           gamesPlayed: 53,
+          coins: 1200,
         },
         {
           id: "3",
@@ -59,6 +64,7 @@ export default function LeaderboardScreen() {
           wins: 32,
           losses: 18,
           gamesPlayed: 50,
+          coins: 1100,
         },
         {
           id: "4",
@@ -67,6 +73,7 @@ export default function LeaderboardScreen() {
           wins: 28,
           losses: 22,
           gamesPlayed: 50,
+          coins: 1000,
         },
         {
           id: "5",
@@ -75,6 +82,7 @@ export default function LeaderboardScreen() {
           wins: 25,
           losses: 20,
           gamesPlayed: 45,
+          coins: 900,
         },
         {
           id: "6",
@@ -83,6 +91,7 @@ export default function LeaderboardScreen() {
           wins: 22,
           losses: 25,
           gamesPlayed: 47,
+          coins: 800,
         },
         {
           id: "7",
@@ -91,6 +100,7 @@ export default function LeaderboardScreen() {
           wins: 18,
           losses: 27,
           gamesPlayed: 45,
+          coins: 700,
         },
         {
           id: "8",
@@ -99,6 +109,7 @@ export default function LeaderboardScreen() {
           wins: 15,
           losses: 30,
           gamesPlayed: 45,
+          coins: 600,
         },
       ];
 
@@ -118,19 +129,6 @@ export default function LeaderboardScreen() {
   const onRefresh = () => {
     setRefreshing(true);
     fetchLeaderboard();
-  };
-
-  const getRankEmoji = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return "🥇";
-      case 2:
-        return "🥈";
-      case 3:
-        return "🥉";
-      default:
-        return "🎯";
-    }
   };
 
   const getEloColor = (elo: number) => {
@@ -164,19 +162,41 @@ export default function LeaderboardScreen() {
         ]}
       >
         <View style={styles.rankContainer}>
-          <ThemedText style={styles.rankEmoji}>{getRankEmoji(rank)}</ThemedText>
-          <ThemedText style={styles.rankNumber}>#{rank}</ThemedText>
+          <View style={styles.rankBadge}>
+            <ThemedText style={styles.rankBadgeText}>#{rank}</ThemedText>
+          </View>
+          <ThemedText style={styles.rankNumber}>Rank</ThemedText>
         </View>
 
         <View style={styles.infoContainer}>
           <ThemedText style={styles.username}>{item.username}</ThemedText>
           <View style={styles.statsRow}>
-            <ThemedText style={styles.statsText}>
-              🎮 {item.gamesPlayed} games
-            </ThemedText>
-            <ThemedText style={styles.statsText}>✅ {item.wins}W</ThemedText>
-            <ThemedText style={styles.statsText}>❌ {item.losses}L</ThemedText>
-            <ThemedText style={styles.statsText}>📊 {winRate}%</ThemedText>
+            <View style={styles.statChip}>
+              <ThemedText style={styles.statsText}>
+                {item.gamesPlayed} games
+              </ThemedText>
+            </View>
+            <View style={styles.statChip}>
+              <ThemedText style={styles.statsText}>{item.wins}W</ThemedText>
+            </View>
+            <View style={styles.statChip}>
+              <ThemedText style={styles.statsText}>{item.losses}L</ThemedText>
+            </View>
+            <View style={styles.statChip}>
+              <ThemedText style={styles.statsText}>{winRate}% win</ThemedText>
+            </View>
+            <View style={[styles.statChip, styles.coinChip]}>
+              <ThemedText style={[styles.statsText, styles.coinText]}>
+                {item.coins} coins
+              </ThemedText>
+            </View>
+            {item.soloGamesPlayed && item.soloGamesPlayed > 0 && (
+              <View style={styles.statChip}>
+                <ThemedText style={styles.statsText}>
+                  {item.soloWins}/{item.soloGamesPlayed} solo
+                </ThemedText>
+              </View>
+            )}
           </View>
         </View>
 
@@ -206,7 +226,10 @@ export default function LeaderboardScreen() {
   return (
     <ThemedView style={styles.container}>
       <View style={styles.header}>
-        <ThemedText style={styles.title}>🏆 Leaderboard</ThemedText>
+        <View style={styles.headerPill}>
+          <ThemedText style={styles.headerPillText}>Season Rankings</ThemedText>
+        </View>
+        <ThemedText style={styles.title}>Leaderboard</ThemedText>
         <ThemedText style={styles.subtitle}>Top Players</ThemedText>
       </View>
 
@@ -225,7 +248,7 @@ export default function LeaderboardScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <ThemedText style={styles.emptyText}>
-              No players yet. Be the first! 🚀
+              No players yet. Be the first.
             </ThemedText>
           </View>
         }
@@ -233,7 +256,7 @@ export default function LeaderboardScreen() {
 
       <View style={styles.footer}>
         <ThemedText style={styles.footerText}>
-          💡 Win games to climb the ranks!
+          Win games to climb the ranks.
         </ThemedText>
       </View>
     </ThemedView>
@@ -258,6 +281,21 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     paddingTop: Spacing.xl,
     alignItems: "center",
+    gap: Spacing.sm,
+  },
+  headerPill: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "rgba(99, 102, 241, 0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(99, 102, 241, 0.35)",
+  },
+  headerPillText: {
+    fontSize: FontSizes.sm,
+    fontWeight: "600",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
   },
   title: {
     fontSize: FontSizes.xxxl,
@@ -290,9 +328,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: Spacing.md,
   },
-  rankEmoji: {
-    fontSize: 24,
+  rankBadge: {
+    minWidth: 44,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "rgba(99, 102, 241, 0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(99, 102, 241, 0.35)",
+    alignItems: "center",
     marginBottom: Spacing.xs,
+  },
+  rankBadgeText: {
+    fontSize: FontSizes.sm,
+    fontWeight: "700",
   },
   rankNumber: {
     fontSize: FontSizes.sm,
@@ -312,9 +361,25 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     flexWrap: "wrap",
   },
+  statChip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "rgba(99, 102, 241, 0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(99, 102, 241, 0.2)",
+  },
+  coinChip: {
+    backgroundColor: "rgba(251, 191, 36, 0.15)",
+    borderColor: "rgba(251, 191, 36, 0.4)",
+  },
   statsText: {
     fontSize: FontSizes.xs,
-    opacity: 0.7,
+    opacity: 0.8,
+    fontWeight: "600",
+  },
+  coinText: {
+    color: "#f59e0b",
   },
   eloContainer: {
     alignItems: "center",
