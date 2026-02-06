@@ -1,5 +1,5 @@
 How to start the Mini Game
--npm install
+(npm install)
 dont look at the errors 🧑‍🍳
 on install
--npm start play
+(npm start) play
