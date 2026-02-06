@@ -3,3 +3,4 @@ How to start the Mini Game
 dont look at the errors 🧑‍🍳
 on install
 (npm start) play
+(click w)
