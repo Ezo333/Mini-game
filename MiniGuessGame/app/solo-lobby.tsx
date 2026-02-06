@@ -255,10 +255,6 @@ export default function SoloLobbyScreen() {
           <View style={styles.headerPill}>
             <ThemedText style={styles.headerPillText}>Solo Mode</ThemedText>
           </View>
-          <ThemedText style={styles.title}>Practice Mode</ThemedText>
-          <ThemedText style={styles.subtitle}>
-            Play against AI and earn coins!
-          </ThemedText>
           {userProfile && (
             <View style={styles.coinDisplay}>
               <ThemedText style={styles.coinText}>
